@@ -1,11 +1,9 @@
 var express = require('express');
-
 var OAuth = require('oauth').OAuth;
 var url = require('url');
 
-/*
-/     Express Server Setup
-*/
+var constants = require('./constants');
+
 var app = express();
 
 app.use(express.static('public'));
@@ -15,9 +13,6 @@ var server = app.listen(3000, function () {
 	console.log('Listening on port %s', server.address().port);
 });
 
-/*
-/     OAuth Setup and Functions
-*/
 const requestURL = 'https://trello.com/1/OAuthGetRequestToken';
 const accessURL = 'https://trello.com/1/OAuthGetAccessToken';
 const authorizeURL = 'https://trello.com/1/OAuthAuthorizeToken';
@@ -25,22 +20,15 @@ const appName = 'Trello OAuth Example';
 const scope = 'read';
 const expiration = '1hour';
 
-// Be sure to include your key and secret in 🗝.env ↖️ over there.
-// You can get your key and secret from Trello at: https://trello.com/app-key
-const key = process.env.TRELLO_KEY;
-const secret = process.env.TRELLO_OAUTH_SECRET;
-console.log({ key, secret });
-
-// Trello redirects the user here after authentication
-const loginCallback = `https://${process.env.PROJECT_DOMAIN}.glitch.me/callback`;
+const loginCallback = `${constants.PROJECT_URL}/callback`;
 
 const oauth_secrets = {};
 
 const oauth = new OAuth(
 	requestURL,
 	accessURL,
-	key,
-	secret,
+	constants.TRELLO_KEY,
+	constants.TRELLO_SECRET,
 	'1.0A',
 	loginCallback,
 	'HMAC-SHA1'
@@ -66,7 +54,6 @@ var callback = function (req, res) {
 		accessTokenSecret,
 		results
 	) {
-		// In a real app, the accessToken and accessTokenSecret should be stored
 		oauth.getProtectedResource(
 			'https://api.trello.com/1/members/me',
 			'GET',
@@ -75,16 +62,12 @@ var callback = function (req, res) {
 			function (error, data, response) {
 				console.log(accessToken);
 				console.log(accessTokenSecret);
-				// Now we can respond with data to show that we have access to your Trello account via OAuth
 				res.send(data);
 			}
 		);
 	});
 };
 
-/*
-/     Routes
-*/
 app.get('/', function (request, response) {
 	console.log(`GET '/' 🤠 ${Date()}`);
 	response.send(

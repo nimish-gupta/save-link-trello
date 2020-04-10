@@ -1,3 +1,4 @@
-.gitconfig
+.gitignore
 .git
 node_modules
+.env

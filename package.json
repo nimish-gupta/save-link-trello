@@ -4,14 +4,17 @@
 	"version": "1.0.0",
 	"main": "server.js",
 	"scripts": {
+		"start:dev": "docker-compose up -d",
 		"start": "node src/server.js",
 		"encrypt": "./scripts/encryptEnv.sh",
-		"decrypt": "./scripts/decryptEnv.sh"
+		"decrypt": "./scripts/decryptEnv.sh",
+		"now-start": "yarn decrypt $ENCRYPTION_KEY && yarn start"
 	},
 	"dependencies": {
 		"express": "^4.15.2",
-		"oauth": "^0.9.15",
 		"http": "^0.0.0",
+		"mongodb": "^3.5.5",
+		"oauth": "^0.9.15",
 		"url": "0.11.0"
 	},
 	"keywords": [

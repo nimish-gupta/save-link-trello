@@ -1,0 +1,22 @@
+version: '2.0'
+
+services:
+  app:
+    build: .
+    ports:
+      - '4000:3000'
+    volumes:
+      - ./src:/app/src
+    working_dir: '/app'
+
+  mongo:
+    image: mongo:3.6.17
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - 'mongo_dump:/data/db'
+
+volumes:
+  mongo_dump:
