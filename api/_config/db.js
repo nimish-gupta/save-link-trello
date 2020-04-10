@@ -12,6 +12,7 @@ async function getCollection() {
 
 	const client = await MongoClient.connect(constants.MONGO_URL, {
 		useNewUrlParser: true,
+		useUnifiedTopology: true,
 	});
 
 	// Select the database through the connection,
@@ -20,7 +21,7 @@ async function getCollection() {
 
 	// Cache the database connection and return the connection
 	cachedCollection = await db.collection(collectionName);
-	return db;
+	return cachedCollection;
 }
 
 const getTokenSecret = async (token) => {
@@ -32,15 +33,13 @@ const getTokenSecret = async (token) => {
 	return tokenSecret.secret;
 };
 
-const storeTokenSecret = async (token, secret) => {
+const storeTokenSecret = async ({ token, secret }) => {
 	const collection = await getCollection();
-	const [row] = await collection
-		.update({ token }, { token, secret }, { upsert: true, multi: false })
-		.toArray();
-	if (row === undefined || row === null) {
-		throw new Error('could not create row', token, secret);
-	}
-	return row;
+	await collection.updateOne(
+		{ token },
+		{ $set: { token, secret } },
+		{ upsert: true, multi: false }
+	);
 };
 
 module.exports = {

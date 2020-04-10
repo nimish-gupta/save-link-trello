@@ -23,14 +23,15 @@ const getOauth = () =>
 		'HMAC-SHA1'
 	);
 
-const getAuthRequestToken = (response) => {
+const getAuthRequestToken = ({ response }) => {
 	const oauth = getOauth();
-	console.log(oauth);
 	oauth.getOAuthRequestToken(async function (error, token, secret) {
 		await storeTokenSecret({ token, secret });
-		response.redirect(
-			`${authorizeURL}?oauth_token=${token}&name=${appName}&scope=${scope}&expiration=${expiration}`
-		);
+
+		response.writeHead(301, {
+			Location: `${authorizeURL}?oauth_token=${token}&name=${appName}&scope=${scope}&expiration=${expiration}`,
+		});
+		response.end();
 	});
 };
 
