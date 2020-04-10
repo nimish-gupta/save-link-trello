@@ -8,7 +8,7 @@ var app = express();
 
 app.use(express.static('public'));
 
-var server = app.listen(3000, function () {
+var server = app.listen(process.env.port, function () {
 	console.log('Server up and running...🏃🏃🏻');
 	console.log('Listening on port %s', server.address().port);
 });
