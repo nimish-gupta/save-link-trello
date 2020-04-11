@@ -6,6 +6,7 @@
 		{
 			"src": "/view-source",
 			"dest": "https://github.com/nimish-gupta/save-link-trello"
-		}
+		},
+		{ "src": "^((?!/api/).)*$", "status": 404 }
 	]
 }

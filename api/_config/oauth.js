@@ -9,8 +9,8 @@ const loginCallback = `${constants.PROJECT_URL}/callback`;
 const authorizeURL = 'https://trello.com/1/OAuthAuthorizeToken';
 
 const appName = 'Save Link Trello Auth';
-const scope = 'read';
-const expiration = '1hour';
+const scope = 'read&write';
+const expiration = 'never';
 
 const getOauth = () =>
 	new OAuth(
@@ -29,7 +29,7 @@ const getAuthRequestToken = ({ response }) => {
 		await storeTokenSecret({ token, secret });
 
 		response.writeHead(301, {
-			Location: `${authorizeURL}?oauth_token=${token}&name=${appName}&scope=${scope}&expiration=${expiration}`,
+			Location: `${authorizeURL}?oauth_token=${token}&name=${appName}&scope=${scope}&expiration=${expiration}&return_url=${loginCallback}`,
 		});
 		response.end();
 	});
@@ -49,9 +49,7 @@ const getOAuthAccessToken = ({ token, tokenSecret, verifier, res }) => {
 			accessToken,
 			accessTokenSecret,
 			function (error, data, response) {
-				console.log(accessToken);
-				console.log(accessTokenSecret);
-				res.send(data);
+				res.json({ token: accessToken, key: constants.TRELLO_KEY });
 			}
 		);
 	});
