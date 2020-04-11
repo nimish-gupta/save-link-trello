@@ -7,7 +7,6 @@ function checkLogin() {
 function reportExecuteScriptError(error) {
 	document.querySelector('#popup-content').classList.add('hidden');
 	document.querySelector('#error-content').classList.remove('hidden');
-	console.error(`Failed to execute beastify content script: ${error.message}`);
 }
 
 function onSuccess() {
@@ -20,6 +19,12 @@ function onSuccess() {
 	} else {
 		authenticateElem.classList.remove('hidden');
 	}
+
+	authenticateElem.addEventListener('click', authenticateUser);
+}
+
+function authenticateUser() {
+	window.open('http://localhost:3000/api/login');
 }
 
 browser.tabs

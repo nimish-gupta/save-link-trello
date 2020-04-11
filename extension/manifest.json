@@ -10,7 +10,7 @@
 		"48": "icons/presentation.svg"
 	},
 
-	"permissions": ["activeTab"],
+	"permissions": ["activeTab", "*://localhost:3000/*"],
 
 	"content_scripts": [
 		{

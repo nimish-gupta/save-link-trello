@@ -28,10 +28,9 @@ const getAuthRequestToken = ({ response }) => {
 	oauth.getOAuthRequestToken(async function (error, token, secret) {
 		await storeTokenSecret({ token, secret });
 
-		response.writeHead(301, {
-			Location: `${authorizeURL}?oauth_token=${token}&name=${appName}&scope=${scope}&expiration=${expiration}&return_url=${loginCallback}`,
-		});
-		response.end();
+		response.redirect(
+			`${authorizeURL}?oauth_token=${token}&name=${appName}&scope=${scope}&expiration=${expiration}&return_url=${loginCallback}`
+		);
 	});
 };
 
