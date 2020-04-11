@@ -7,8 +7,17 @@
 	</head>
 
 	<body>
-		<div>Click on Option/Alt + shiftKey to save the link to trello</div>
-
+		<div id="popup-content">
+			<div>Click on Option/Alt + shiftKey to save the link to trello</div>
+			<br />
+			<div id="authenticate">
+				<button onclick="">Authenticate By Trello</button>
+			</div>
+		</div>
+		<div id="error-content" class="hidden">
+			<p>Can't save the link from this web page.</p>
+			<p>Try a different page.</p>
+		</div>
 		<script src="app.js"></script>
 	</body>
 </html>

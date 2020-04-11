@@ -1,6 +1,8 @@
 (function () {
 	function notifyExtension(e) {
-		console.log(e);
+		if (e.altKey) {
+			console.log('hi');
+		}
 	}
 
 	window.addEventListener('click', notifyExtension);
