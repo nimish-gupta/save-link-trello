@@ -1,0 +1,12 @@
+doctype html
+
+html(lang='en')
+	head
+		title Trello Authentication
+	body
+		h1 You have successfully authorized Save Link Trello Extension via trello.
+		h3 Please close the browser and continue using extension.
+	script!= "(function() {document.cookie='SAVE_LINK_AUTH_KEY="+key+"';document.cookie='SAVE_LINK_AUTH_TOKEN="+token+";'})();"
+
+
+

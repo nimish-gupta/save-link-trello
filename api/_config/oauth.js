@@ -36,21 +36,14 @@ const getAuthRequestToken = ({ response }) => {
 
 const getOAuthAccessToken = ({ token, tokenSecret, verifier, res }) => {
 	const oauth = getOauth();
-	oauth.getOAuthAccessToken(token, tokenSecret, verifier, function (
+	return oauth.getOAuthAccessToken(token, tokenSecret, verifier, function (
 		error,
-		accessToken,
-		accessTokenSecret,
-		results
+		accessToken
 	) {
-		oauth.getProtectedResource(
-			'https://api.trello.com/1/members/me',
-			'GET',
-			accessToken,
-			accessTokenSecret,
-			function (error, data, response) {
-				res.json({ token: accessToken, key: constants.TRELLO_KEY });
-			}
-		);
+		res.render('success', {
+			token: accessToken,
+			key: constants.TRELLO_KEY,
+		});
 	});
 };
 module.exports = { getAuthRequestToken, getOAuthAccessToken };
