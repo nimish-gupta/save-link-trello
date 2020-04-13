@@ -18,6 +18,22 @@
 			<p>Can't save the link from this web page.</p>
 			<p>Try a different page.</p>
 		</div>
+		<div id="trello-content" class="hidden">
+			<form
+				id
+				name="getBoard"
+				onsubmit="event.preventDefault();checkBoardName();"
+			>
+				<input
+					type="text"
+					id="trello-board"
+					placeholder="Enter the trello board name"
+				/>
+				<br />
+				<input type="submit" value="Submit" />
+			</form>
+		</div>
+		<script src="trello.js"></script>
 		<script src="app.js"></script>
 	</body>
 </html>

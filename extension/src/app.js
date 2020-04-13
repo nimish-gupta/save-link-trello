@@ -1,20 +1,7 @@
-function getCookie(cookies) {
-	return function (name) {
-		const [cookie] = cookies.filter((cookie) => cookie.name === name);
-		return cookie ? (cookie.value ? cookie.value : undefined) : undefined;
-	};
-}
-
 async function checkLogin() {
-	const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
-	const cookies = await browser.cookies.getAll({ url: 'http://localhost/api' });
+	const { token, key } = await getCredentials()();
 
-	const cookieFetcher = getCookie(cookies);
-
-	const token = cookieFetcher('SAVE_LINK_AUTH_TOKEN');
-	const key = cookieFetcher('SAVE_LINK_AUTH_KEY');
-	await browser.tabs.sendMessage(tab.id, { token, key });
-	return token !== undefined && key === undefined;
+	return token !== undefined && key !== undefined;
 }
 
 function reportExecuteScriptError(error) {
@@ -23,18 +10,25 @@ function reportExecuteScriptError(error) {
 	document.querySelector('#error-content').innerHTML = error;
 }
 
-function onSuccess() {
-	const isLogin = checkLogin();
+async function onSuccess() {
+	const isLogin = await checkLogin();
 
 	const authenticateElem = document.querySelector('#authenticate');
+	const trelloContent = document.querySelector('#trello-content');
 
-	if (isLogin) {
+	if (isLogin === true) {
 		authenticateElem.classList.add('hidden');
+		trelloContent.classList.remove('hidden');
 	} else {
 		authenticateElem.classList.remove('hidden');
+		trelloContent.classList.add('hidden');
 	}
 
 	authenticateElem.addEventListener('click', authenticateUser);
+}
+
+async function checkBoardName() {
+	fetch('');
 }
 
 function authenticateUser() {
