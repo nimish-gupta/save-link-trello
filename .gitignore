@@ -1,4 +1,8 @@
 node_modules
+.now
+
+## api
 api/_config/constants.js
 
-.now
+## extension
+extension/web-ext-artifacts
