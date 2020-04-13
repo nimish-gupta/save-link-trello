@@ -7,7 +7,7 @@ const login = require('./login');
 
 const app = express();
 
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 app.set('views', path.resolve(__dirname, 'views'));
 
 app.use(logger('short'));
