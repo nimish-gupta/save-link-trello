@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Save Link Trello",
-	"version": "1.0",
+	"version": "1.1",
 	"homepage_url": "https://github.com/nimish-gupta/save-link-trello/tree/master/extension",
 
 	"description": "Save the links to trello when opening with a particular shortcut",
@@ -10,7 +10,7 @@
 		"48": "icons/presentation.svg"
 	},
 
-	"permissions": ["activeTab", "*://localhost:3000/*"],
+	"permissions": ["activeTab", "cookies", "*://localhost/*", "storage"],
 
 	"content_scripts": [
 		{

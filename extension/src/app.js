@@ -1,12 +1,26 @@
-function checkLogin() {
-	const token = window.localStorage.getItem('TRELLO_SAVE_LINK_TOKEN');
-	const key = window.localStorage.getItem('TRELLO_SAVE_LINK_KEY');
+function getCookie(cookies) {
+	return function (name) {
+		const [cookie] = cookies.filter((cookie) => cookie.name === name);
+		return cookie ? (cookie.value ? cookie.value : undefined) : undefined;
+	};
+}
+
+async function checkLogin() {
+	const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
+	const cookies = await browser.cookies.getAll({ url: 'http://localhost/api' });
+
+	const cookieFetcher = getCookie(cookies);
+
+	const token = cookieFetcher('SAVE_LINK_AUTH_TOKEN');
+	const key = cookieFetcher('SAVE_LINK_AUTH_KEY');
+	await browser.tabs.sendMessage(tab.id, { token, key });
 	return token !== undefined && key === undefined;
 }
 
 function reportExecuteScriptError(error) {
 	document.querySelector('#popup-content').classList.add('hidden');
 	document.querySelector('#error-content').classList.remove('hidden');
+	document.querySelector('#error-content').innerHTML = error;
 }
 
 function onSuccess() {
