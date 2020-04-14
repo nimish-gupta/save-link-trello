@@ -1,6 +1,8 @@
+const boardKey = 'SAVE_LINK_BOARD_ID';
+const listKey = 'SAVE_LINK_LIST_ID';
+
 async function checkLogin() {
 	const { token, key } = await getCredentials();
-
 	return token !== undefined && key !== undefined;
 }
 
@@ -18,7 +20,7 @@ async function onSuccess() {
 
 	if (isLogin) {
 		authenticateElem.classList.add('hidden');
-		const isNamePresent = await checkBoardNamePresent();
+		const isNamePresent = await checkBoardPresent();
 		if (!isNamePresent) {
 			trelloContent.classList.remove('hidden');
 		}
@@ -34,7 +36,8 @@ async function onSuccess() {
 async function getBoardName() {
 	const name = document.querySelector('#trello-board-input').value;
 	const board = await fetchBoard(name);
-	await saveInLocalStorage({ boardKey: board.name });
+	const list = await fetchList(board.id);
+	await saveInLocalStorage({ [boardKey]: board.id, [listKey]: list.id });
 }
 
 function authenticateUser() {
