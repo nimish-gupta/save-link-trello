@@ -1,5 +1,5 @@
 async function checkLogin() {
-	const { token, key } = await getCredentials()();
+	const { token, key } = await getCredentials();
 
 	return token !== undefined && key !== undefined;
 }
@@ -16,10 +16,14 @@ async function onSuccess() {
 	const authenticateElem = document.querySelector('#authenticate');
 	const trelloContent = document.querySelector('#trello-content');
 
-	if (isLogin === true) {
+	if (isLogin) {
 		authenticateElem.classList.add('hidden');
-		trelloContent.classList.remove('hidden');
+		const isNamePresent = await checkBoardNamePresent();
+		if (!isNamePresent) {
+			trelloContent.classList.remove('hidden');
+		}
 	} else {
+		await clearLocalStorage();
 		authenticateElem.classList.remove('hidden');
 		trelloContent.classList.add('hidden');
 	}
@@ -27,8 +31,10 @@ async function onSuccess() {
 	authenticateElem.addEventListener('click', authenticateUser);
 }
 
-async function checkBoardName() {
-	fetch('');
+async function getBoardName() {
+	const name = document.querySelector('#trello-board-input').value;
+	const board = await fetchBoard(name);
+	await saveInLocalStorage({ boardKey: board.name });
 }
 
 function authenticateUser() {
