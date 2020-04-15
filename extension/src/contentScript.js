@@ -16,7 +16,7 @@
 				  }`;
 
 			const response = await fetch(
-				`https://api.trello.com/1/cards?idList=${store.SAVE_LINK_LIST_ID}&key=${store.SAVE_LINK_AUTH_KEY}&token=${store.SAVE_LINK_AUTH_TOKEN}&name='${href}'`,
+				`https://api.trello.com/1/cards?idList=${store.SAVE_LINK_LIST_ID}&key=${store.SAVE_LINK_AUTH_KEY}&token=${store.SAVE_LINK_AUTH_TOKEN}&name=${href}`,
 				{ method: 'POST' }
 			);
 			await response.json();
