@@ -6,7 +6,7 @@ ARG ENCRYPTION_KEY
 
 LABEL email="gnimish03@gmail.com"
 
-WORKDIR /api
+WORKDIR /save-link-trello
 
 COPY package.json yarn.* ./
 
@@ -14,7 +14,7 @@ RUN if [ "$ENVIRONMENT" = "production" ] ; then yarn install --production=true ;
 
 RUN yarn decrypt $ENCRYPTION_KEY
 
-COPY api/. ./
+COPY . .
 
 EXPOSE 3000
 
