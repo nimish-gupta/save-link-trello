@@ -26,3 +26,10 @@ async function saveInLocalStorage(object) {
 async function clearLocalStorage() {
 	await browser.storage.local.clear();
 }
+
+async function addDebugger(data) {
+	const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
+	if (tab) {
+		await browser.tabs.sendMessage(tab.id, { data });
+	}
+}
