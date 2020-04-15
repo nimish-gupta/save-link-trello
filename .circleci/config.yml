@@ -1,0 +1,27 @@
+version: 2
+
+jobs:
+  build:
+    machine: true
+    working_directory: ~/save-link-trello
+    steps:
+      - checkout
+      - run:
+          name: Build Docker image
+          command: docker build -t gnimish/save-link-trello:$CIRCLE_SHA1 .
+      - run:
+          name: Push to Docker hub
+          command: |
+            docker login -u $DOCKERHUB_LOGIN -p $DOCKERHUB_PASSWORD
+            docker push gnimish/save-link-trello:$CIRCLE_SHA1
+      - run:
+          name: Deploy to Heroku
+          command: |
+            docker login --username=$HEROKU_LOGIN --password=$HEROKU_API_KEY registry.heroku.com
+            docker tag gnimish/save-link-trello:$CIRCLE_SHA1 registry.heroku.com/$HEROKU_APP_NAME/web
+            docker push registry.heroku.com/$HEROKU_APP_NAME/web
+
+workflows:
+  build:
+    jobs:
+      - build
