@@ -14,5 +14,6 @@ app.use(logger('short'));
 
 app.get('/api/login', login);
 app.get('/api/callback', callback);
+app.get('/api/ping', (res) => res.send('pong'));
 
 app.listen(3000);
