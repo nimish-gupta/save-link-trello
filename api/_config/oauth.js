@@ -9,7 +9,7 @@ const loginCallback = `${constants.PROJECT_URL}/callback`;
 const authorizeURL = 'https://trello.com/1/OAuthAuthorizeToken';
 
 const appName = 'Save Link Trello Auth';
-const scope = 'read&write';
+const scope = 'read,write';
 const expiration = 'never';
 
 const getOauth = () =>

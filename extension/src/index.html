@@ -19,7 +19,7 @@
 			<p>Try a different page.</p>
 		</div>
 		<div id="trello-content" class="hidden">
-			<form name="getBoard" onsubmit="event.preventDefault();getBoardName();">
+			<form id="nimish-board">
 				<input
 					required="true"
 					type="text"
@@ -30,6 +30,7 @@
 				<input type="submit" value="Submit" />
 			</form>
 		</div>
+		<script src="constants.js"></script>
 		<script src="util.js"></script>
 		<script src="trello.js"></script>
 		<script src="app.js"></script>
