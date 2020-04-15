@@ -1,6 +1,3 @@
-const boardKey = 'SAVE_LINK_BOARD_ID';
-const listKey = 'SAVE_LINK_LIST_ID';
-
 async function checkLogin() {
 	const { token, key } = await getCredentials();
 	return token !== undefined && key !== undefined;
@@ -33,16 +30,22 @@ async function onSuccess() {
 	authenticateElem.addEventListener('click', authenticateUser);
 }
 
-async function getBoardName() {
+async function getBoardName(e) {
+	e.preventDefault();
 	const name = document.querySelector('#trello-board-input').value;
 	const board = await fetchBoard(name);
 	const list = await fetchList(board.id);
 	await saveInLocalStorage({ [boardKey]: board.id, [listKey]: list.id });
+	document.querySelector('#trello-content').classList.add('hidden');
 }
 
 function authenticateUser() {
 	window.open('http://localhost:3000/api/login');
 }
+
+document
+	.querySelector('#nimish-board')
+	.addEventListener('submit', getBoardName);
 
 browser.tabs
 	.executeScript({ file: './contentScript.js' })

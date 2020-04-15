@@ -10,7 +10,14 @@
 		"48": "icons/presentation.svg"
 	},
 
-	"permissions": ["activeTab", "cookies", "*://localhost/*", "storage"],
+	"permissions": [
+		"activeTab",
+		"cookies",
+		"*://localhost/*",
+		"*://api.trello.com/*",
+		"storage",
+		"webRequest"
+	],
 
 	"content_scripts": [
 		{

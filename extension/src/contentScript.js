@@ -7,14 +7,19 @@
 				'SAVE_LINK_AUTH_TOKEN',
 				'SAVE_LINK_AUTH_KEY',
 			]);
-			return fetch(
-				`https://api.trello.com/1/cards?idList=${store.SAVE_LINK_LIST_ID}&key=${
-					store.SAVE_LINK_AUTH_KEY
-				}&token=${store.SAVE_LINK_AUTH_TOKEN}&name=${e.target.getAttribute(
-					'href'
-				)}`,
+			const r = new RegExp('^(?:[a-z]+:)?//', 'i');
+			let href = e.target.getAttribute('href');
+			href = r.test(href)
+				? href
+				: `${window.location.protocol}//${window.location.host}${
+						href[0] === '/' ? href : '/' + href
+				  }`;
+
+			const response = await fetch(
+				`https://api.trello.com/1/cards?idList=${store.SAVE_LINK_LIST_ID}&key=${store.SAVE_LINK_AUTH_KEY}&token=${store.SAVE_LINK_AUTH_TOKEN}&name='${href}'`,
 				{ method: 'POST' }
 			);
+			await response.json();
 		}
 	}
 

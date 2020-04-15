@@ -1,8 +1,3 @@
-const trelloLink = 'https://api.trello.com/1/';
-const tokenKey = 'SAVE_LINK_AUTH_TOKEN';
-const keyKey = 'SAVE_LINK_AUTH_KEY';
-const boardKey = 'SAVE_LINK_BOARD_ID';
-
 async function getCredentials() {
 	const storage = await getFromStorage([tokenKey, keyKey]);
 	let token = storage[tokenKey];
@@ -12,7 +7,7 @@ async function getCredentials() {
 		return { token, key };
 	}
 
-	[token, key] = getFromCookies([tokenKey, keyKey]);
+	[token, key] = await getFromCookies([tokenKey, keyKey]);
 
 	await saveInLocalStorage({ [tokenKey]: token, [keyKey]: key });
 
@@ -47,10 +42,10 @@ async function fetchList(boardId) {
 	const link = await getTrelloLink(`boards/${boardId}/lists?`);
 
 	const result = await fetch(link);
-	const response = await result.json();
+	const lists = await result.json();
 
-	if (response.lists) {
-		const list = response.lists.find(
+	if (lists) {
+		const list = lists.find(
 			(list) => list.name.toLowerCase() === 'things to do'
 		);
 		if (list !== undefined) {
@@ -62,6 +57,6 @@ async function fetchList(boardId) {
 }
 
 async function checkBoardPresent() {
-	const [board] = await getFromCookies([boardKey]);
+	const { [boardKey]: board } = await getFromStorage([boardKey]);
 	return board !== undefined;
 }
