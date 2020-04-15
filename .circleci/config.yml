@@ -7,6 +7,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Installing Heroku cli
+          command: curl https://cli-assets.heroku.com/install.sh | sh
+      - run:
           name: Build Docker image
           command: docker build -t gnimish/save-link-trello:$CIRCLE_SHA1 .
       - run:
@@ -20,6 +23,7 @@ jobs:
             docker login --username=$HEROKU_LOGIN --password=$HEROKU_API_KEY registry.heroku.com
             docker tag gnimish/save-link-trello:$CIRCLE_SHA1 registry.heroku.com/$HEROKU_APP_NAME/web
             docker push registry.heroku.com/$HEROKU_APP_NAME/web
+            heroku container:release web -a $HEROKU_APP_NAME
 
 workflows:
   build:
