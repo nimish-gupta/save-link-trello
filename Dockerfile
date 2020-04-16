@@ -12,7 +12,5 @@ RUN if [ "$ENVIRONMENT" = "production" ] ; then yarn install --production=true ;
 
 COPY . .
 
-EXPOSE 3000
-
 CMD yarn decrypt && \
   if [ "$ENVIRONMENT" = "production" ] ; then yarn start:dev ; else yarn start ; fi

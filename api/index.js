@@ -16,4 +16,4 @@ app.get('/api/login', login);
 app.get('/api/callback', callback);
 app.get('/api/ping', (_, res) => res.send('pong'));
 
-app.listen(3000);
+app.listen(process.env.PORT || 3000);
