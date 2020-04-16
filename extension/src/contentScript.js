@@ -1,5 +1,5 @@
 (function () {
-	async function getHref(e) {
+	function getHref(e) {
 		let event = e || window.event;
 		const href = event.target.getAttribute('href');
 		const r = new RegExp('^(?:[a-z]+:)?//', 'i');
@@ -13,11 +13,15 @@
 	}
 
 	async function createTrelloCard(params) {
-		const response = await fetch(
-			`https://api.trello.com/1/cards?idList=${params.idList}&key=${store.key}&token=${store.token}&name=${params.name}&desc=${params.desc}&urlSource=${params.urlSource}`,
-			{ method: 'POST' }
-		);
-		await response.json();
+		try {
+			const response = await fetch(
+				`https://api.trello.com/1/cards?idList=${params.idList}&key=${params.key}&token=${params.token}&name=${params.name}&desc=${params.desc}&urlSource=${params.urlSource}`,
+				{ method: 'POST' }
+			);
+			await response.json();
+		} catch (error) {
+			console.log(error);
+		}
 	}
 
 	async function notifyExtension(e) {
@@ -38,7 +42,7 @@
 				urlSource,
 				idList: store.SAVE_LINK_LIST_ID,
 				key: store.SAVE_LINK_AUTH_KEY,
-				token: store.SAVE_LINK_AUTH_KEY,
+				token: store.SAVE_LINK_AUTH_TOKEN,
 			});
 		}
 	}
