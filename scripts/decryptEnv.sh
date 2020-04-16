@@ -1,8 +1,14 @@
 #!/bin/bash
 
-set -eux
+set -eu
 
-ENCRYPTION_KEY=$1
+ENCRYPTION_KEY=$ENCRYPTION_KEY
+
+if [ -z $ENCRYPTION_KEY ]
+then
+  echo "hi"
+  ENCRYPTION_KEY=$1
+fi
 
 FILE_NAME=api/_config/constants.js
 ENCRYPTED_FILE_NAME="$FILE_NAME.encrypted"

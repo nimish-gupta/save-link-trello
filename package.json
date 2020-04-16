@@ -6,7 +6,8 @@
 	"scripts": {
 		"encrypt": "./scripts/encryptEnv.sh",
 		"decrypt": "./scripts/decryptEnv.sh",
-		"start:dev": "nodemon ./api/index.js"
+		"start:dev": "nodemon ./api/index.js",
+		"start": "node ./api/index.js"
 	},
 	"dependencies": {
 		"express": "^4.15.2",
