@@ -40,7 +40,7 @@ async function getBoardName(e) {
 }
 
 function authenticateUser() {
-	window.open('http://localhost:3000/api/login');
+	window.open('https://save-link-trello.herokuapp.com/api/login');
 }
 
 document

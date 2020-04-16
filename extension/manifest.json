@@ -13,7 +13,7 @@
 	"permissions": [
 		"activeTab",
 		"cookies",
-		"*://localhost/*",
+		"https://save-link-trello.herokuapp.com/*",
 		"*://api.trello.com/*",
 		"storage",
 		"webRequest"

@@ -12,7 +12,7 @@ function getCookie(cookies) {
 
 async function getFromCookies(keys = []) {
 	const cookies = await browser.cookies.getAll({
-		url: 'http://localhost/api',
+		url: 'https://save-link-trello.herokuapp.com/api',
 	});
 
 	const cookieFetcher = getCookie(cookies);
