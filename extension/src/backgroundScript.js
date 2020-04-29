@@ -3,8 +3,15 @@ Log that we received the message.
 Then display a notification. The notification contains the URL,
 which we read from the message.
 */
-async function createNotification(link) {
-	const message = `Following ${link} is saved to trello`;
+
+function getMessage({ type, link, error }) {
+	if (type === error) {
+		return `Link, ${link} could not be saved to ${error}`;
+	}
+	return `Following ${link} is saved to trello`;
+}
+async function createNotification({ link, type }) {
+	const message = getMessage({ type, link });
 	browser.notifications.create({
 		type: 'basic',
 		title: 'Save Link Trello',

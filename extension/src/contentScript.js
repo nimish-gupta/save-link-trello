@@ -29,24 +29,32 @@
 			const name = document.title;
 			const desc = getHref(e);
 			const urlSource = desc;
-			window.open(urlSource, '_blank');
-			window.focus();
+			try {
+				window.open(urlSource, '_blank');
+				window.focus();
 
-			const store = await browser.storage.local.get([
-				'SAVE_LINK_LIST_ID',
-				'SAVE_LINK_AUTH_TOKEN',
-				'SAVE_LINK_AUTH_KEY',
-			]);
+				const store = await browser.storage.local.get([
+					'SAVE_LINK_LIST_ID',
+					'SAVE_LINK_AUTH_TOKEN',
+					'SAVE_LINK_AUTH_KEY',
+				]);
 
-			await createTrelloCard({
-				name,
-				desc,
-				urlSource,
-				idList: store.SAVE_LINK_LIST_ID,
-				key: store.SAVE_LINK_AUTH_KEY,
-				token: store.SAVE_LINK_AUTH_TOKEN,
-			});
-			await browser.runtime.sendMessage(urlSource);
+				await createTrelloCard({
+					name,
+					desc,
+					urlSource,
+					idList: store.SAVE_LINK_LIST_ID,
+					key: store.SAVE_LINK_AUTH_KEY,
+					token: store.SAVE_LINK_AUTH_TOKEN,
+				});
+				await browser.runtime.sendMessage({ link: urlSource });
+			} catch (error) {
+				await browser.runtime.sendMessage({
+					link: urlSource,
+					type: 'error',
+					error: error.message,
+				});
+			}
 		}
 	}
 
