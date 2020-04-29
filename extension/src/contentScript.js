@@ -46,6 +46,7 @@
 				key: store.SAVE_LINK_AUTH_KEY,
 				token: store.SAVE_LINK_AUTH_TOKEN,
 			});
+			await browser.runtime.sendMessage(urlSource);
 		}
 	}
 

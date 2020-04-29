@@ -10,13 +10,18 @@
 		"48": "icons/presentation.svg"
 	},
 
+	"background": {
+		"scripts": ["src/backgroundScript.js"]
+	},
+
 	"permissions": [
 		"activeTab",
 		"cookies",
 		"https://save-link-trello.herokuapp.com/*",
 		"*://api.trello.com/*",
 		"storage",
-		"webRequest"
+		"webRequest",
+		"notifications"
 	],
 
 	"content_scripts": [
