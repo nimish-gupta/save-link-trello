@@ -5,13 +5,13 @@ which we read from the message.
 */
 
 function getMessage({ type, link, error }) {
-	if (type === error) {
+	if (type === 'error') {
 		return `Link, ${link} could not be saved to ${error}`;
 	}
 	return `Following ${link} is saved to trello`;
 }
-async function createNotification({ link, type }) {
-	const message = getMessage({ type, link });
+async function createNotification({ link, type, error }) {
+	const message = getMessage({ type, link, error });
 	browser.notifications.create({
 		type: 'basic',
 		title: 'Save Link Trello',
