@@ -1,4 +1,8 @@
 (function () {
+	function checkLink(event) {
+		return event.target.href !== null && event.target.href !== undefined;
+	}
+
 	function getHref(e) {
 		let event = e || window.event;
 		const href = event.target.getAttribute('href');
@@ -26,12 +30,15 @@
 
 	async function notifyExtension(e) {
 		if (e.altKey) {
+			const isLink = checkLink(e);
 			const name = document.title;
-			const desc = getHref(e);
+			const desc = isLink ? getHref(e) : window.location.href;
 			const urlSource = desc;
 			try {
-				window.open(urlSource, '_blank');
-				window.focus();
+				if (isLink) {
+					window.open(urlSource, '_blank');
+					window.focus();
+				}
 
 				const store = await browser.storage.local.get([
 					'SAVE_LINK_LIST_ID',
