@@ -17,15 +17,57 @@
 	}
 
 	async function createTrelloCard(params) {
-		try {
-			const response = await fetch(
-				`https://api.trello.com/1/cards?idList=${params.idList}&key=${params.key}&token=${params.token}&name=${params.name}&desc=${params.desc}&urlSource=${params.urlSource}`,
-				{ method: 'POST' }
-			);
-			const card = await response.json();
-			return card.id;
-		} catch (error) {
-			console.log('err', error);
+		const response = await fetch(
+			`https://api.trello.com/1/cards?idList=${params.idList}&key=${params.key}&token=${params.token}&name=${params.name}&desc=${params.desc}&urlSource=${params.urlSource}`,
+			{ method: 'POST' }
+		);
+		const card = await response.json();
+		return card.id;
+	}
+
+	async function deleteTrelloCard(params) {
+		const response = await fetch(
+			`https://api.trello.com/1/cards/${params.id}?key=${params.key}&token=${params.token}`,
+			{
+				method: 'DELETE',
+			}
+		);
+		await response.json();
+	}
+
+	async function deleteCard(e) {
+		const event = window.event ? window.event : e;
+		if (event.keyCode == 82 && event.altKey) {
+			const href = window.location.href;
+			const cardExists = await browser.storage.local.get(href);
+			let msgType = 'success',
+				msg = `Link is successfully deleted.`;
+			if (cardExists[href] === undefined) {
+				msgType = 'error';
+				msg = `Link could not be deleted. You have to manually delete the link from trello.`;
+			} else {
+			}
+			try {
+				const store = await browser.storage.local.get([
+					'SAVE_LINK_LIST_ID',
+					'SAVE_LINK_AUTH_TOKEN',
+					'SAVE_LINK_AUTH_KEY',
+				]);
+				await deleteTrelloCard({
+					id: cardExists[href],
+					key: store.SAVE_LINK_AUTH_KEY,
+					token: store.SAVE_LINK_AUTH_TOKEN,
+				});
+				await browser.storage.local.remove(href);
+			} catch (error) {
+				msgType = 'error';
+				msg = `Link, ${href} could not be deleted due to ${error.message}`;
+			}
+			return await browser.runtime.sendMessage({
+				msg,
+				link: href,
+				type: msgType,
+			});
 		}
 	}
 
@@ -38,12 +80,11 @@
 
 			const cardAlreadyExists = await browser.storage.local.get(urlSource);
 			if (cardAlreadyExists[urlSource]) {
-				await browser.runtime.sendMessage({
+				return await browser.runtime.sendMessage({
 					link: urlSource,
 					type: 'error',
 					error: 'link is already stored in the browser',
 				});
-				return '';
 			}
 			try {
 				if (isLink) {
