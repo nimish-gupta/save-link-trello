@@ -22,9 +22,10 @@
 				`https://api.trello.com/1/cards?idList=${params.idList}&key=${params.key}&token=${params.token}&name=${params.name}&desc=${params.desc}&urlSource=${params.urlSource}`,
 				{ method: 'POST' }
 			);
-			await response.json();
+			const card = await response.json();
+			return card.id;
 		} catch (error) {
-			console.log(error);
+			console.log('err', error);
 		}
 	}
 
@@ -34,6 +35,16 @@
 			const name = document.title;
 			const desc = isLink ? getHref(e) : window.location.href;
 			const urlSource = desc;
+
+			const cardAlreadyExists = await browser.storage.local.get(urlSource);
+			if (cardAlreadyExists[urlSource]) {
+				await browser.runtime.sendMessage({
+					link: urlSource,
+					type: 'error',
+					error: 'link is already stored in the browser',
+				});
+				return '';
+			}
 			try {
 				if (isLink) {
 					window.open(urlSource, '_blank');
@@ -46,7 +57,7 @@
 					'SAVE_LINK_AUTH_KEY',
 				]);
 
-				await createTrelloCard({
+				const cardId = await createTrelloCard({
 					name,
 					desc,
 					urlSource,
@@ -54,6 +65,7 @@
 					key: store.SAVE_LINK_AUTH_KEY,
 					token: store.SAVE_LINK_AUTH_TOKEN,
 				});
+				await browser.storage.local.set({ [desc]: cardId });
 				await browser.runtime.sendMessage({ link: urlSource });
 			} catch (error) {
 				await browser.runtime.sendMessage({
@@ -66,5 +78,6 @@
 	}
 
 	window.addEventListener('click', notifyExtension);
+	document.onkeydown = deleteCard;
 })();
 browser.runtime.onMessage.addListener((message) => console.log(message));

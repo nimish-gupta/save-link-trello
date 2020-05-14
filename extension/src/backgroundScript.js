@@ -6,7 +6,7 @@ which we read from the message.
 
 function getMessage({ type, link, error }) {
 	if (type === 'error') {
-		return `Link, ${link} could not be saved to ${error}`;
+		return `Link, ${link} could not be saved as ${error}`;
 	}
 	return `Following ${link} is saved to trello`;
 }
