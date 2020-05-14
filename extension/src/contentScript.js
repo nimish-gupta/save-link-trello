@@ -52,11 +52,13 @@
 						'SAVE_LINK_AUTH_TOKEN',
 						'SAVE_LINK_AUTH_KEY',
 					]);
+
 					await deleteTrelloCard({
 						id: cardExists[href],
 						key: store.SAVE_LINK_AUTH_KEY,
 						token: store.SAVE_LINK_AUTH_TOKEN,
 					});
+
 					await browser.storage.local.remove(href);
 				} catch (error) {
 					msgType = 'error';
