@@ -44,24 +44,24 @@
 				msg = `Link is successfully deleted.`;
 			if (cardExists[href] === undefined) {
 				msgType = 'error';
-				msg = `Link could not be deleted. You have to manually delete the link from trello.`;
+				msg = `You have to manually delete the link from trello. :(`;
 			} else {
-			}
-			try {
-				const store = await browser.storage.local.get([
-					'SAVE_LINK_LIST_ID',
-					'SAVE_LINK_AUTH_TOKEN',
-					'SAVE_LINK_AUTH_KEY',
-				]);
-				await deleteTrelloCard({
-					id: cardExists[href],
-					key: store.SAVE_LINK_AUTH_KEY,
-					token: store.SAVE_LINK_AUTH_TOKEN,
-				});
-				await browser.storage.local.remove(href);
-			} catch (error) {
-				msgType = 'error';
-				msg = `Link, ${href} could not be deleted due to ${error.message}`;
+				try {
+					const store = await browser.storage.local.get([
+						'SAVE_LINK_LIST_ID',
+						'SAVE_LINK_AUTH_TOKEN',
+						'SAVE_LINK_AUTH_KEY',
+					]);
+					await deleteTrelloCard({
+						id: cardExists[href],
+						key: store.SAVE_LINK_AUTH_KEY,
+						token: store.SAVE_LINK_AUTH_TOKEN,
+					});
+					await browser.storage.local.remove(href);
+				} catch (error) {
+					msgType = 'error';
+					msg = error.message;
+				}
 			}
 			return await browser.runtime.sendMessage({
 				msg,
@@ -77,13 +77,13 @@
 			const name = document.title;
 			const desc = isLink ? getHref(e) : window.location.href;
 			const urlSource = desc;
-
 			const cardAlreadyExists = await browser.storage.local.get(urlSource);
+
 			if (cardAlreadyExists[urlSource]) {
 				return await browser.runtime.sendMessage({
 					link: urlSource,
 					type: 'error',
-					error: 'link is already stored in the browser',
+					msg: 'Link is already stored in the browser',
 				});
 			}
 			try {
@@ -106,13 +106,17 @@
 					key: store.SAVE_LINK_AUTH_KEY,
 					token: store.SAVE_LINK_AUTH_TOKEN,
 				});
+
 				await browser.storage.local.set({ [desc]: cardId });
-				await browser.runtime.sendMessage({ link: urlSource });
+				await browser.runtime.sendMessage({
+					link: urlSource,
+					msg: `Link is successfully saved to trello!`,
+				});
 			} catch (error) {
 				await browser.runtime.sendMessage({
 					link: urlSource,
 					type: 'error',
-					error: error.message,
+					msg: error.message,
 				});
 			}
 		}

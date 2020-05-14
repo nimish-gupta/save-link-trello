@@ -4,14 +4,14 @@ Then display a notification. The notification contains the URL,
 which we read from the message.
 */
 
-function getMessage({ type, link, error, msg = undefined }) {
+function getMessage({ type, msg }) {
 	if (type === 'error') {
-		return msg || `Link, ${link} could not be saved as ${error}`;
+		return `ERROR!, ${msg}`;
 	}
-	return msg || `Following ${link} is saved to trello`;
+	return msg;
 }
-async function createNotification({ link, type, error }) {
-	const message = getMessage({ type, link, error });
+async function createNotification({ link, type, msg }) {
+	const message = getMessage({ type, msg });
 	browser.notifications.create({
 		type: 'basic',
 		title: 'Save Link Trello',
