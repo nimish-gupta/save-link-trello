@@ -6,7 +6,7 @@ async function checkLogin() {
 function reportExecuteScriptError(error) {
 	document.querySelector('#popup-content').classList.add('hidden');
 	document.querySelector('#error-content').classList.remove('hidden');
-	document.querySelector('#error-content').innerHTML = error;
+	document.querySelector('#error-content').textContent = error;
 }
 
 async function onSuccess() {
