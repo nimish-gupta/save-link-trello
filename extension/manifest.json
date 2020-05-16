@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Save Link Trello",
-	"version": "2.0",
+	"version": "2.1",
 	"homepage_url": "https://github.com/nimish-gupta/save-link-trello/tree/master/extension",
 
 	"description": "Save the links to trello when opening with a particular shortcut",
@@ -20,7 +20,6 @@
 		"https://save-link-trello.herokuapp.com/*",
 		"*://api.trello.com/*",
 		"storage",
-		"webRequest",
 		"notifications"
 	],
 
@@ -37,5 +36,11 @@
 		"default_popup": "src/index.html"
 	},
 
-	"web_accessible_resources": ["icons/presentation.svg"]
+	"web_accessible_resources": ["icons/presentation.svg"],
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "{e99efb9b-ece7-4d32-9915-251f1ca27683}",
+			"strict_min_version": "42.0"
+		}
+	}
 }
